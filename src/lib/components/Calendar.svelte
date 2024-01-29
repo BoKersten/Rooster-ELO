@@ -8,6 +8,7 @@
 	}
     const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
 	let monthIndex = date.getMonth();
+   
 	$: month =  monthNames[monthIndex];
 	let year = date.getFullYear();
 
@@ -16,29 +17,36 @@
 	let currentDay = date.getDate();
     $: cellQty = firstDayIndex <= 4 ? 35 : 42; 
 
-	const goToPrevMonth = () => {
+   
+	const goToPrev = () => {
+       
 		if(monthIndex <= 0){
 			year -= 1;
 			return monthIndex = 11;
 		}
       monthIndex -= 1;
+    
 	}
 
-	const goToNextMonth = () => {
+	const goToNext = () => {
+       
 		if(monthIndex >= 11){
 			year += 1;
 			return monthIndex = 0;
 		}
 		monthIndex += 1;
-	}
+    }
+	
 
-	$: console.log(monthIndex)
+	
 </script>
 <main>
+    
 <div class="month">
+    
 	<ul>
-	  <li class="prev" on:click={goToPrevMonth}>&#10094;</li>
-	  <li class="next" on:click={goToNextMonth}>&#10095;</li>
+	  <li class="prev" on:click={goToPrev}>&#10094;</li>
+	  <li class="next" on:click={goToNext}>&#10095;</li>
 	  <li>{month}<br>
 		<span style="font-size:18px">{year}</span></li>
 	</ul>
@@ -127,16 +135,18 @@
 	  padding: 10px 0;
 	  background: #eee;
 	  margin: 0;
+      
 	}
 	
 	.days li {
 	  list-style-type: none;
 	  display: inline-block;
-	  width: 13.6%;
+	  width: 14%;
 	  text-align: center;
 	  margin-bottom: 5px;
 	  font-size:12px;
 	  color: #777;
+      
 	}
 	
 	/* Highlight the "current" day */
