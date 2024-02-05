@@ -145,10 +145,10 @@
 						date: '2023-11-20',
 						new: true,
 						feedback: ''
-					}, {
-						grade: '',
+					},
+					{
+						grade: ''
 					}
-
 				]
 			}
 		}
@@ -168,10 +168,18 @@
 	// Function to fetch data from marks.json
 	const fetchMarks = async () => {
 		marks = exampleMarks;
+<<<<<<< HEAD
         
 		marksToBeGraded = marks.filter(mark => !mark.result.grades[mark.result.grades.length - 1]?.grade);
         passedTests = marks.filter(mark => mark.result.grades[mark.result.grades.length - 1].pass == true);
 	    failedTests = marks.filter(mark => mark.result.grades[mark.result.grades.length - 1].pass == false);
+=======
+
+		marksToBeGraded = marks.filter(
+			(mark) => !mark.result.grades[mark.result.grades.length - 1]?.grade
+		);
+
+>>>>>>> 7b13e8fd81513c03139b34caf689ac0f020b22bc
 		marksGroupedBySubject = await marks.reduce((acc, obj) => {
 			const subject = obj.subject.name;
 
@@ -217,20 +225,22 @@
 	<title>Cijfers</title>
 </head>
 
-<div class="stats stats-vertical sm:stats-horizontal shadow">
-	<div class="stat">
+<div class="scroll-smooth stats stats-horizontal max-w-full shadow snap-x">
+	<div class="stat snap-center">
 		<div class="stat-title">Toetsen gemaakt</div>
 		<div class="stat-value">{marks.length}</div>
 		<div class="stat-desc">{date.getFullYear() - 1} - {date.getFullYear()} ({Math.round(marks.length / totalTests * 100)}%)</div>
 	</div>
 
-	<div class="stat">
+	<div class="stat snap-center">
 		<div class="stat-title">Gemiddelde</div>
 		<div class="stat-value">8,24</div>
-		<div class="stat-desc text-success"><TrendingUp class="text-success w-3 h-3 inline" /> 0,46 (5,5%)</div>
+		<div class="stat-desc text-success">
+			<TrendingUp class="text-success w-3 h-3 inline" /> 0,46 (5,5%)
+		</div>
 	</div>
 
-	<div class="stat">
+	<div class="stat snap-center">
 		<div class="stat-title">Voldoendes</div>
 		<div class="stat-value">{passedTests.length / (passedTests.length + failedTests.length) * 100}%</div>
 		<div class="stat-desc">
@@ -254,7 +264,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each marks.sort((a, b) => new Date(b.result.grades[0].date) - new Date(a.result.grades[0].date)).filter(mark => mark.result.grades[mark.result.grades.length - 1]?.grade) as mark}
+					{#each marks
+						.sort((a, b) => new Date(b.result.grades[0].date) - new Date(a.result.grades[0].date))
+						.filter((mark) => mark.result.grades[mark.result.grades.length - 1]?.grade) as mark}
 						<tr class="hover" on:click={() => openMarkModal(mark)}>
 							<td
 								><b>{mark.id}</b> - {mark.name}
@@ -296,8 +308,7 @@
 								{/if}</td
 							>
 							<td class="capitalize">{mark.subject.name}</td>
-							<td	class="">{mark.conduct.date}</td
-							>
+							<td class="">{mark.conduct.date}</td>
 							<td>{mark.weight}</td>
 						</tr>
 					{/each}
@@ -388,7 +399,10 @@
 		<h3 class="text-xl font-bold capitalize">Deze week</h3>
 		<p class="mb-3">Alle toetsen van deze week die nog niet gemaakt zijn komen hier te staan</p>
 		<h3 class="text-xl font-bold capitalize">Deze periode</h3>
-		<p class="mb-3">Alle toetsen van deze periode die nog niet zijn gemaakt en niet deze week zijn komen hier te staan</p>
+		<p class="mb-3">
+			Alle toetsen van deze periode die nog niet zijn gemaakt en niet deze week zijn komen hier te
+			staan
+		</p>
 	</div>
 </div>
 
