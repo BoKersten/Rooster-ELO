@@ -1,43 +1,49 @@
 <script>
-let date = new Date();
-let day = date.getDate();
-const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
-let month = date.getMonth();
-let today = new Date();
-$: year = date.getFullYear();
-$: lastDayOfMonth = new Date(today.getFullYear(), month+1, 0).getDate();
 
-const goToPrev = () => {
-day -= 1;
-if(day < 1){
-	month -= 1;
+
+	let date = new Date();
+	$: day = date.getDate();
+	const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+	let month = date.getMonth();
+	let today = new Date();
+	$: hour = date.getHours();
+    $: minutes = date.getMinutes();
 	
-	day = lastDayOfMonth;
-}
-if(month == -1 /*if month is before january*/){
+	$: year = date.getFullYear();
+	$: lastDayOfMonth = new Date(today.getFullYear(), month+1, 0).getDate();
+	$: lastDayOfPrevMonth = new Date(today.getFullYear(), month, 0).getDate();
+	
+	const goToPrev = () => {
+	day -= 1;
+	if(day < 1){
+		month -= 1;
 		
-		month = 11; // set month equal to december
-		year -= 1;
-		
+		day = lastDayOfPrevMonth;
 	}
-}
-
-const goToNext = () => {
-day += 1;
-
-if(day > lastDayOfMonth){
-    month += 1;
-    day = 1;
-}
-
-if(month == 12 /*if month is after december*/){
-	month = 0; // set month to january
-	year += 1; // up the year by one
-}
-}
-
-
-</script>
+	if(month == -1 /*if month is before january*/){
+			
+			month = 11; // set month equal to december
+			year -= 1;
+			
+		}
+	}
+	
+	const goToNext = () => {
+	day += 1;
+	
+	if(day > lastDayOfMonth){
+		month += 1;
+		day = 1;
+	}
+	
+	if(month == 12 /*if month is after december*/){
+		month = 0; // set month to january
+		year += 1; // up the year by one
+	}
+	}
+	
+	
+	</script>
 
 
 <main>
@@ -66,7 +72,13 @@ if(month == 12 /*if month is after december*/){
 
       </ul>
 
-      <ul class="time h-80"></ul>
+      <ul class="time h-80">
+       {#if day == date.getDate()}
+		 <!-- content here -->
+		<div class="tooltip line" data-tip="{hour + ":" + minutes}" style="left: {hour * 4.16667 + minutes * 0.06944444444 + '%'};" id="line"></div>
+	  
+	{/if}
+	</ul>
 </main>
 
 
@@ -114,7 +126,7 @@ ul {list-style-type: none;}
 	  margin: 0;
 	  padding: 10px 0;
 	  background-color:#ddd;
-      
+      width: 100%;
 	}
 	
 	.timeline li {
@@ -122,7 +134,7 @@ ul {list-style-type: none;}
 	  border-right: solid;
 	  color: #666;
 	  text-align: center;
-      width: 12%;
+      width: 12.5%;
       font-size: 20px;
 	}
 	
@@ -130,6 +142,14 @@ ul {list-style-type: none;}
 	  padding: 10px 0;
 	  background: #eee;
 	  margin: 0;
+	  height: 250px;
       
+	}
+
+	.line{
+		width: 1px;
+		height: 100%;
+		border-left: solid red 1px;
+		position: relative;
 	}
 </style>

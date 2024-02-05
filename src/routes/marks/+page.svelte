@@ -158,15 +158,20 @@
 	let marksToBeGraded = [];
 	let marksGroupedBySubject = [];
 	let marksGroupedByExamWeek = [];
-
+	let date = new Date;
+	let totalTests = 78; //total tests for that year currently hard coded
 	let modalMark = {};
-
+	//let short = Object.values(exampleMarks[0].result.grades[0]).filter((v) => v).length;
+	//console.log(short);
+	let passedTests = []; 
+    let failedTests = [];
 	// Function to fetch data from marks.json
 	const fetchMarks = async () => {
 		marks = exampleMarks;
-
+        
 		marksToBeGraded = marks.filter(mark => !mark.result.grades[mark.result.grades.length - 1]?.grade);
-
+        passedTests = marks.filter(mark => mark.result.grades[mark.result.grades.length - 1].pass == true);
+	    failedTests = marks.filter(mark => mark.result.grades[mark.result.grades.length - 1].pass == false);
 		marksGroupedBySubject = await marks.reduce((acc, obj) => {
 			const subject = obj.subject.name;
 
@@ -205,6 +210,7 @@
 		mark_modal.showModal();
 		console.log(modalMark);
 	}
+	
 </script>
 
 <head>
@@ -214,8 +220,8 @@
 <div class="stats stats-vertical sm:stats-horizontal shadow">
 	<div class="stat">
 		<div class="stat-title">Toetsen gemaakt</div>
-		<div class="stat-value">23</div>
-		<div class="stat-desc">2022 - 2023 (34%)</div>
+		<div class="stat-value">{marks.length}</div>
+		<div class="stat-desc">{date.getFullYear() - 1} - {date.getFullYear()} ({Math.round(marks.length / totalTests * 100)}%)</div>
 	</div>
 
 	<div class="stat">
@@ -226,9 +232,9 @@
 
 	<div class="stat">
 		<div class="stat-title">Voldoendes</div>
-		<div class="stat-value">91,3%</div>
+		<div class="stat-value">{passedTests.length / (passedTests.length + failedTests.length) * 100}%</div>
 		<div class="stat-desc">
-			<span class="text-success">21</span> / <span class="text-error">2</span>
+			<span class="text-success">{passedTests.length}</span> / <span class="text-error">{failedTests.length}</span> / <span>{marksToBeGraded.length}</span>
 		</div>
 	</div>
 </div>
